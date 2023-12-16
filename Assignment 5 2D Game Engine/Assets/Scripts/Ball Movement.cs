@@ -1,41 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BallMovement : MonoBehaviour
 {
-    public float startSpeed;
-    public float extraSpeed;
-    public float maxExtraSpeed;
+    [SerializeField] public float initialSpeed = 10;
+    [SerializeField] public float speedIncrease = 0.25f;
+    [SerializeField] private Text playerScore;
+    [SerializeField] private Text AIScore;
 
-    private int hitCounter = 0;
-    private Rigidbody2D rigidbody;
+    private int hitCounter;
+    private Rigidbody2D rb;
     
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
-        StartCoroutine(Launch());
+        rb = GetComponent<Rigidbody2D>();
+        Invoke("StartBall", 2f);
+
     }
-    public IEnumerator Launch()
+    private void FixedUpdate()
     {
+        rb.velocity = Vector2.ClampMagnitude(rb.velocity, initialSpeed +(speedIncrease * hitCounter));
+    }
+    private void StartBall()
+    {
+        rb.velocity = new Vector2(-1, 0) * (initialSpeed + speedIncrease * hitCounter);
+
+    }
+    private void ResetBall()
+    {
+        rb.velocity = new Vector2(0, 0);
+        transform.position = new Vector2(0, 0);
         hitCounter = 0;
-        yield return new WaitForSeconds(1);
+        Invoke("StartBall", 2f);
+    }
 
-        MoveBall(new Vector2(-1, 0));
 
-    }
-    public void MoveBall(Vector2 direction)
-    {
-        direction = direction.normalized;
-        float ballSpeed = startSpeed + hitCounter * extraSpeed;
-        rigidbody.velocity = direction * ballSpeed;
-    }
-    public void IncreaseHitCounter()
-    {
-        if(hitCounter * extraSpeed > maxExtraSpeed)
-        {
-            hitCounter ++;
-        }
-        
-    }
+
+
+
 }
