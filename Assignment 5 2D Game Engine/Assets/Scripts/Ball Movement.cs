@@ -35,6 +35,35 @@ public class BallMovement : MonoBehaviour
         hitCounter = 0;
         Invoke("StartBall", 2f);
     }
+    private void PlayerBounce(Transform myObject)
+    {
+        hitCounter++;
+        Vector2 ballPos = transform.position;
+        Vector2 playerPos = myObject.position;
+
+        float xDirection, yDirection;
+        if(transform.position.x > 0)
+        {
+            xDirection = -1;
+        }
+        else
+        {
+            xDirection = 1;
+        }
+        yDirection = (ballPos.y - playerPos.y) / myObject.GetComponent<Collider2D>().bounds.size.y;
+        if (yDirection == 0)
+        {
+            yDirection = 0.25f;
+        }
+        rb.velocity = new Vector2(xDirection, yDirection) * (initialSpeed + (speedIncrease * hitCounter));
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.name == "Player" || collision.gameObject.name == "AI")
+        {
+            PlayerBounce(collision.transform);
+        }
+    }
 
 
 
