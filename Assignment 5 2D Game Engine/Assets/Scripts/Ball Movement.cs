@@ -64,6 +64,18 @@ public class BallMovement : MonoBehaviour
             PlayerBounce(collision.transform);
         }
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(transform.position.x > 0)
+        {
+            playerScore.text = (int.Parse(playerScore.text) +1).ToString();
+        }
+        else if(transform.position.x < 0)
+        {
+            ResetBall();
+            AIScore.text = (int.Parse(AIScore.text) +1).ToString();
+        } 
+    }
 
 
 
