@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void PlayerControl()
     {
-        playerMove = new Vector2(0, Input.GetAxisRaw("vertical"));
+        playerMove = new Vector2(0, Input.GetAxisRaw("Vertical"));
     }
     private void AIControl()
     {
